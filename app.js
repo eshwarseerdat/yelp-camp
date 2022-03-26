@@ -23,6 +23,11 @@ app.get("/campground", async (req, res) => {
   res.render("campgrounds/index", { campgrounds });
 });
 
+app.get("/campground/:id", async (req, res) => {
+  const foundCamp = await Campground.findById(req.params.id);
+  res.render("campgrounds/show", { foundCamp });
+});
+
 app.listen("8080", () => {
   console.log(`running on port 8080`);
 });
