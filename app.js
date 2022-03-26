@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
-const campground = require("./model/campground");
+const Campground = require("./model/campground");
 
 mongoose.connect("mongodb://localhost:27017/yelp-camp");
 
@@ -19,13 +19,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/campground", async (req, res) => {
-  const camp = new campground({
-    title: "Backyard",
-    price: "0.01",
-    description: "Camping on a budget",
-  });
-  await camp.save();
-  res.send(camp);
+  const campgrounds = await Campground.find({});
+  res.render("campgrounds/index", { campgrounds });
 });
 
 app.listen("8080", () => {
