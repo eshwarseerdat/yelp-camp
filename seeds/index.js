@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const campground = require("../model/campground");
+const axios = require("axios");
+const Campground = require("../model/campground");
 const cities = require("./cities");
 const { descriptors, places } = require("./seedHelpers");
 
@@ -17,13 +18,31 @@ const campName = () => {
   return `${campDescriptor} ${campPlaces}`;
 };
 
+const getImage = async function () {
+  try {
+    const resp = await axios.get("https://api.unsplash.com/photos/random", {
+      params: {
+        client_id: "GJJ3UT0BHMAb__3bTkB4ie5mVXHPj1SR06Uye1o2r9E",
+        collections: 1114848,
+      },
+    });
+    return resp.data.urls.small;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const seedDB = async () => {
-  await campground.deleteMany({});
-  for (let i = 0; i < 50; i++) {
+  await Campground.deleteMany({});
+  for (let i = 0; i < 30; i++) {
     const { city, state } = randCity();
-    const camp = new campground({
+    const camp = new Campground({
       location: `${city}, ${state}`,
       title: campName(),
+      image: await getImage(),
+      description:
+        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Veniam minima est ducimus, assumenda facere unde.",
+      price: 19.99,
     });
     await camp.save();
   }
