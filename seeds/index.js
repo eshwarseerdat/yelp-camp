@@ -34,15 +34,16 @@ const getImage = async function () {
 
 const seedDB = async () => {
   await Campground.deleteMany({});
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 40; i++) {
     const { city, state } = randCity();
+    const price = Math.trunc(Math.random() * 20) + 10;
     const camp = new Campground({
       location: `${city}, ${state}`,
       title: campName(),
       image: await getImage(),
       description:
         "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Veniam minima est ducimus, assumenda facere unde.",
-      price: 19.99,
+      price,
     });
     await camp.save();
   }
