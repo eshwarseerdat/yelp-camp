@@ -1,10 +1,39 @@
 <% layout("/layouts/boilerplate") -%>
-<h1>Edit Campground</h1>
-<form action="/campgrounds/<%= foundCamp._id %>?_method=PUT" method="post">
-  <label for="">Title</label>
-  <input type="text" id="title" name="campground[title]" value="<%= foundCamp.title %> ">
-  <label for="">Location</label>
-  <input type="text" id="location" name="campground[location]" value="<%= foundCamp.location %> ">
-  <button>Update</button>
-</form>
-<a href="/campgrounds/<%= foundCamp._id %>">Cancel</a>
+<div class="row">
+  <h1 class="text-center">New Campground</h1>
+  <div class="col-6 offset-3">
+    <form action="/campgrounds" method="post">
+      <div class="mb-3">
+        <label class="form-label" for="title">Title</label>
+        <input class="form-control" type="text" id="title" name="campground[title]" value="<%= foundCamp.title %>">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="location">Location</label>
+        <input class="form-control" type="text" id="location" name="campground[location]"
+          value="<%= foundCamp.location %>">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="image">Image URL</label>
+        <input class="form-control" type="text" id="image" name="campground[image]" value="<%= foundCamp.image %>">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Description</label>
+        <textarea class="form-control" type="text" id="description"
+          name="campground[description]"><%= foundCamp.description %></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Campground Price</label>
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <input type="text" id="price" name="campground[price]" class="form-control" aria-label="Amount"
+            value="<%= foundCamp.price %>">
+        </div>
+      </div>
+      <div class="mb-1">
+        <button class="btn btn-info">Update Campground</button>
+      </div>
+      <br>
+    </form>
+    <a class="btn" href="/campgrounds">Cancel</a>
+  </div>
+</div>

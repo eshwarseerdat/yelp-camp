@@ -24,6 +24,7 @@ const getImage = async function () {
       params: {
         client_id: "GJJ3UT0BHMAb__3bTkB4ie5mVXHPj1SR06Uye1o2r9E",
         collections: 1114848,
+        orientation: "landscape",
       },
     });
     return resp.data.urls.small;
