@@ -5,6 +5,7 @@ const engine = require("ejs-mate");
 const path = require("path");
 
 const Campground = require("./model/campground");
+const Review = require("./model/review");
 const { campgroundSchema } = require("./schemas.js");
 const ExpressError = require("./utils/expressError");
 const catchAsync = require("./utils/catchAsync");
@@ -68,6 +69,14 @@ app.get(
   })
 );
 
+app.get(
+  "/campgrounds/:id",
+  catchAsync(async (req, res) => {
+    const foundCamp = await Campground.findById(req.params.id);
+    res.render("campgrounds/show", { foundCamp });
+  })
+);
+
 app.put(
   "/campgrounds/:id",
   validateCampground,
@@ -87,11 +96,15 @@ app.delete(
   })
 );
 
-app.get(
-  "/campgrounds/:id",
+app.post(
+  "/campgrounds/:id/reviews",
   catchAsync(async (req, res) => {
-    const foundCamp = await Campground.findById(req.params.id);
-    res.render("campgrounds/show", { foundCamp });
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
   })
 );
 
