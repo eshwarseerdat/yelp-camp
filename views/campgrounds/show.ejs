@@ -23,14 +23,14 @@
       </div>
     </div>
     <h2>Leave A Review</h2>
-    <form action="/campgrounds/<%= foundCamp._id %>/reviews" method="post" class="mb-4">
+    <form action="/campgrounds/<%= foundCamp._id %>/reviews" method="post" class="mb-4 needs-validation" novalidate>
       <div class="mb-3">
         <label class="form-label" for="rating">Rating (1-5)</label>
         <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
       </div>
       <div class="mb-3">
         <label class="form-label" for="body">Review</label>
-        <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3"></textarea>
+        <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
       </div>
       <button class="btn btn-success" type="submit">Submit</button>
     </form>

@@ -6,7 +6,7 @@ const path = require("path");
 
 const Campground = require("./model/campground");
 const Review = require("./model/review");
-const { campgroundSchema } = require("./schemas.js");
+const { campgroundSchema, reviewSchema } = require("./schemas.js");
 const ExpressError = require("./utils/expressError");
 const catchAsync = require("./utils/catchAsync");
 const { join } = require("path");
@@ -34,6 +34,16 @@ const validateCampground = function (req, res, next) {
   }
 };
 
+const validateReview = function (req, res, next) {
+  const { error } = reviewSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((e) => e.message).join(",");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
 app.get("/", (req, res) => {
   res.render("home");
 });
@@ -50,17 +60,6 @@ app.get("/campgrounds/new", (req, res) => {
   res.render("campgrounds/new");
 });
 
-app.post(
-  "/campgrounds",
-  validateCampground,
-  catchAsync(async (req, res, next) => {
-    // if (!req.body.campground) next(new ExpressError("Invalid Form Data", 400));
-    const newCamp = new Campground(req.body.campground);
-    await newCamp.save();
-    res.redirect(`/campgrounds/${newCamp._id}`);
-  })
-);
-
 app.get(
   "/campgrounds/:id/edit",
   catchAsync(async (req, res) => {
@@ -74,6 +73,17 @@ app.get(
   catchAsync(async (req, res) => {
     const foundCamp = await Campground.findById(req.params.id);
     res.render("campgrounds/show", { foundCamp });
+  })
+);
+
+app.post(
+  "/campgrounds",
+  validateCampground,
+  catchAsync(async (req, res, next) => {
+    // if (!req.body.campground) next(new ExpressError("Invalid Form Data", 400));
+    const newCamp = new Campground(req.body.campground);
+    await newCamp.save();
+    res.redirect(`/campgrounds/${newCamp._id}`);
   })
 );
 
@@ -98,6 +108,7 @@ app.delete(
 
 app.post(
   "/campgrounds/:id/reviews",
+  validateReview,
   catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
